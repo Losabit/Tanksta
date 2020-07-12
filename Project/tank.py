@@ -3,12 +3,12 @@ import math
 import os
 from bullet import Bullet
 
-directory = str(os.path.abspath(os.getcwd()))  + '/Project/'
+directory = str(os.path.abspath(os.getcwd()))  + '/' #'/Project/'
 
 class Tank(pygame.sprite.Sprite):
     def __init__(self, position):
         super().__init__
-
+        self.health = 100
         self.body_image = pygame.image.load(directory + 'assets/objects/tanks_tankGreen_body3.png')
         self.body_rect = self.body_image.get_rect()
         self.body_rect.x = position[0]
@@ -30,12 +30,25 @@ class Tank(pygame.sprite.Sprite):
 
         self.bullets = []
 
-    def display(self, screen):
+    def display(self, screen, tanks):
         screen.blit(self.canon_image, self.canon_rect)
         screen.blit(self.wheel_image, self.wheel_rect)
         screen.blit(self.body_image, self.body_rect)
-        for bullet in self.bullets:
+        for i in range(len(self.bullets)):
+            if i == len(self.bullets):
+                i -= 1
+            bullet = self.bullets[i]
             bullet.display(screen)
+            if bullet.rect[1] > 710:
+                del self.bullets[i]
+            elif bullet.rect[0] > 1500 or bullet.rect[0] < -500:
+                del self.bullets[i]
+            else:
+                for tank_ennemi in tanks:
+                    if abs(bullet.rect[0] - tank_ennemi.body_rect.x) < 30 and abs(bullet.rect[1] - tank_ennemi.body_rect.y) < 30:
+                        tank_ennemi.touched(bullet.damage)
+                        del self.bullets[i]
+
 
     def moveCanon(self, value):
         self.canon_angle += value
@@ -52,3 +65,6 @@ class Tank(pygame.sprite.Sprite):
         self.wheel_rect.x += value
         self.body_rect.x += value
         self.canon_rect.x += value
+
+    def touched(self, value):
+        self.health -= value

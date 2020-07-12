@@ -2,7 +2,7 @@ import pygame
 import os
 from tank import Tank
 
-min_puissance = 1
+min_puissance = 4
 max_puissance = 10
 value_puissance = 0.05
 ecart_angle = 15
@@ -54,7 +54,6 @@ class Player():
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_SPACE:
-                print(self.puissance)
                 self.tank.shoot(self.puissance if self.puissance < max_puissance else max_puissance)
                 self.puissance = min_puissance
                 self.increase_puissance = False

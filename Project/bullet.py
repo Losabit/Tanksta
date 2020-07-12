@@ -2,7 +2,7 @@ import pygame
 import os
 import math
 
-directory = str(os.path.abspath(os.getcwd()))  + '/Project/'
+directory = str(os.path.abspath(os.getcwd())) + '/' #'/Project/'
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, coordonates, angle, puissance):
@@ -11,26 +11,32 @@ class Bullet(pygame.sprite.Sprite):
         self.rect = coordonates
         self.image = pygame.transform.rotate(self.origin_image, angle)
         self.angle = angle
+        self.damage = 20
         self.puissance = puissance
-        self.before_rect_y = ((-9.81 * math.pow(self.rect[0], 2)) / (2 * math.pow(self.puissance * math.cos(math.radians(self.angle)), 2)) + self.rect[0] * math.tan(math.radians(self.angle)))
-        self.altitude_max = math.pow(self.puissance * math.sin(math.radians(self.angle)), 2) / (2 * 9.81) + self.rect[1]
+        self.altitude_max = self.rect[1] - 650 * math.sin(math.radians(self.angle)) 
+        self.altitude_start = self.rect[1]
         self.chute = False
+        '''
+        print("angle : " + str(self.angle))
+        print("puissance : " + str(self.puissance))
+        print(self.rect[0])
+        print("altitude max : " + str(self.altitude_max))
+        '''
 
     def display(self, screen):
         screen.blit(self.image, self.rect)
         self.fire()
 
     def fire(self):
-        self.rect[0] += self.puissance
-        rect_y = ((-9.81 * math.pow(self.rect[0], 2)) / (2 * math.pow(self.puissance * math.cos(math.radians(self.angle)), 2)) + self.rect[0] * math.tan(math.radians(self.angle)))
+        self.rect[0] += self.puissance * math.cos(math.radians(self.angle)) 
         
-        if self.rect[1] > self.altitude_max:
+        if self.rect[1] < self.altitude_max:
             self.chute = True
+            self.rect[1] = self.altitude_max
+
+        #coeff = 1 - math.sin((self.rect[1] * math.pi / 2) / self.altitude_max)
         if self.chute:
-            self.rect[1] -= (rect_y - self.before_rect_y) / 1000
+            self.rect[1] += self.puissance * math.sin(math.radians(abs(self.angle))) 
         else:
-            self.rect[1] += (rect_y - self.before_rect_y) / 1000
+            self.rect[1] -= self.puissance * math.sin(math.radians(self.angle))
         
-        self.before_rect_y = rect_y
-        print(self.rect[1])
-        print(self.altitude_max )
