@@ -19,5 +19,7 @@ class RequestServer():
             self.loadGame(result["play_on"])
 
     def loadGame(self, id):
+        print("t")
 
     def deleteAll(self):
+        print("t")
