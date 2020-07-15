@@ -2,6 +2,7 @@ import pygame
 import os
 import random
 from tank import Tank
+from controller import Controller
 
 min_puissance = 4
 max_puissance = 10
@@ -10,7 +11,7 @@ ecart_angle = 15
 canon_angle_value = 2
 move_value = 3
 
-class AI():
+class AI(Controller):
     def __init__(self, Tank):
         Controller.__init__(self, Tank)
 

@@ -53,14 +53,13 @@ while running:
                     elif event.ui_element == offline_button:
                         game_start = True
                         is_online = False
-                        party = Offline(2, 650)
+                        party = Offline(2, 650,manager, screen)
         if event.type == pygame.QUIT:
             pygame.quit()
             print("Game Closed")
             running = False
     
-    if not game_start:
-        manager.update(time_delta)
-        manager.draw_ui(screen)
+    manager.update(time_delta)
+    manager.draw_ui(screen)
    
     

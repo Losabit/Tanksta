@@ -5,17 +5,19 @@ sys.path.append('controllers')
 from player import Player
 from ai import AI
 from tank import Tank
+from gui import GUI
 
 MOVEMENT_LIMIT = 120
 
 class Offline():
-    def __init__(self, numberOfPlayers, y):
+    def __init__(self, numberOfPlayers, y, manager,screen):
         self.tanks = self.initTankPositions(numberOfPlayers, y)
         self.player = Player(self.tanks[0])
         self.ai = [AI(self.tanks[i]) for i in range(1, len(self.tanks))]
         self.turn = -1
         self.origin_tank_position = None
         self.nextTurn()
+        self.gui = GUI(self.tanks,manager=manager)
         
 
     def initTankPositions(self, numberOfTank, y):
@@ -25,6 +27,10 @@ class Offline():
         return tanks
 
     def update(self, screen):
+
+        #Draw info GUI
+        self.gui.draw(self.turn,screen)
+
         if self.turn == 0:
             self.player.update()
             if self.difference_position(self.origin_tank_position, self.player.tank.body_rect) > MOVEMENT_LIMIT or len(self.player.tank.bullets) >= 1:
@@ -42,7 +48,7 @@ class Offline():
         for i in range(len(self.tanks)):
             if i >= len(self.tanks):
                 i = len(self.tanks) - 1
-            if self.tanks[i].health <= 0:
+            if self.tanks[i].current_health <= 0:
                 del self.tanks[i] 
 
         if len(self.tanks) == 1:

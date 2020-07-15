@@ -8,7 +8,8 @@ directory = str(os.path.abspath(os.getcwd()))  + '/' #'/Project/'
 class Tank(pygame.sprite.Sprite):
     def __init__(self, position):
         super().__init__
-        self.health = 100
+        self.health_capacity = 100
+        self.current_health = 100
         self.body_image = pygame.image.load(directory + 'assets/objects/tanks_tankGreen_body3.png')
         self.body_rect = self.body_image.get_rect()
         self.body_rect.x = position[0]
@@ -67,4 +68,4 @@ class Tank(pygame.sprite.Sprite):
         self.canon_rect.x += value
 
     def touched(self, value):
-        self.health -= value
+        self.current_health -= value
