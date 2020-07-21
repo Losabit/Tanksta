@@ -4,6 +4,8 @@ import os
 from bullet import Bullet
 
 directory = str(os.path.abspath(os.getcwd()))  + '/' #'/Project/'
+clock = pygame.time.Clock()
+
 
 class Tank(pygame.sprite.Sprite):
     def __init__(self, position):
@@ -32,6 +34,7 @@ class Tank(pygame.sprite.Sprite):
         self.bullets = []
 
     def display(self, screen, tanks):
+        time_delta = clock.tick(60)/100.0
         screen.blit(self.canon_image, self.canon_rect)
         screen.blit(self.wheel_image, self.wheel_rect)
         screen.blit(self.body_image, self.body_rect)
@@ -39,7 +42,7 @@ class Tank(pygame.sprite.Sprite):
             if i == len(self.bullets):
                 i -= 1
             bullet = self.bullets[i]
-            bullet.display(screen)
+            bullet.display(screen, time_delta)
             if bullet.rect[1] > 710:
                 del self.bullets[i]
             elif bullet.rect[0] > 1500 or bullet.rect[0] < -500:
@@ -50,11 +53,10 @@ class Tank(pygame.sprite.Sprite):
                         tank_ennemi.touched(bullet.damage)
                         del self.bullets[i]
 
-
     def moveCanon(self, value):
         self.canon_angle += value
         self.canon_image = pygame.transform.rotate(self.canon_originImage, self.canon_angle)
-        self.canon_rect = self.canon_image.get_rect(center= self.canon_rect.center)
+        self.canon_rect = self.canon_image.get_rect(center=self.canon_rect.center)
 
     def shoot(self, puissance):
         coordonates = list(self.canon_rect.center)
