@@ -3,7 +3,7 @@ import os
 from tank import Tank
 from controller import Controller
 
-min_puissance = 4
+min_puissance = 2
 max_puissance = 10
 ecart_angle = 15
 

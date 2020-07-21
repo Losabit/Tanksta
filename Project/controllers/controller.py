@@ -3,7 +3,7 @@ import os
 import sys
 from tank import Tank
 
-min_puissance = 4
+min_puissance = 2
 max_puissance = 10
 value_puissance = 0.05
 ecart_angle = 15
@@ -20,9 +20,9 @@ class Controller():
         self.can_move_canon = False
         self.canon_direction = 0
 
-
     def update(self):
         if self.increase_puissance:
+            print("Increasing power", self.puissance)
             self.puissance += value_puissance
         if self.move and self.direction != 0:
             self.tank.move(move_value if self.direction > 0 else -move_value)
