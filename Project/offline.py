@@ -3,8 +3,8 @@ import pygame
 import pygame_gui
 
 sys.path.append('controllers')
-from player import Player
-from ai import AI
+from controllers.player import Player
+from controllers.ai import AI
 from tank import Tank
 from gui import GUI
 

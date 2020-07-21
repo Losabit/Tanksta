@@ -3,7 +3,7 @@ import pygame_gui
 import math
 import os
 from request import RequestServer
-from offline import Offline 
+from offline import Offline
 
 
 directory = str(os.path.abspath(os.getcwd())) + '/' # + '/Project/'
