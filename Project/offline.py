@@ -1,5 +1,6 @@
 import sys
 import pygame
+import pygame_gui
 
 sys.path.append('controllers')
 from player import Player
@@ -10,14 +11,17 @@ from gui import GUI
 MOVEMENT_LIMIT = 120
 
 class Offline():
-    def __init__(self, numberOfPlayers, y, manager,screen):
+    def __init__(self, numberOfPlayers, y,screen):
+        clock = pygame.time.Clock()
+        self.time_delta = clock.tick(60)/1000.0
+        self.manager = pygame_gui.UIManager((1600, 900))
         self.tanks = self.initTankPositions(numberOfPlayers, y)
         self.player = Player(self.tanks[0])
         self.ai = [AI(self.tanks[i]) for i in range(1, len(self.tanks))]
         self.turn = -1
         self.origin_tank_position = None
         self.nextTurn()
-        self.gui = GUI(self.tanks,manager=manager)
+        self.gui = GUI(self.tanks,manager=self.manager)
         
 
     def initTankPositions(self, numberOfTank, y):
@@ -62,6 +66,9 @@ class Offline():
                 pygame.quit()
                 print("Game Closed")
                 running = False
+
+        self.manager.update(self.time_delta)
+        self.manager.draw_ui(screen)
 
         return True
 
