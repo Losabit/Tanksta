@@ -5,9 +5,7 @@ import os
 from request import RequestServer
 from offline import Offline
 
-
-directory = str(os.path.abspath(os.getcwd())) + '/' # + '/Project/'
-
+directory = str(os.path.abspath(os.getcwd())) + '/'  # + '/Project/'
 
 pygame.init()
 pygame.display.set_caption("Tanksta")
@@ -26,21 +24,21 @@ online_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((750, 175
                                              text='Play Online',
                                              manager=manager)
 offline_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((750, 100), (100, 50)),
-                                             text='Play Offline',
-                                             manager=manager)
+                                              text='Play Offline',
+                                              manager=manager)
 
 while running:
     pygame.display.flip()
-    time_delta = clock.tick(60)/1000.0
+    time_delta = clock.tick(60) / 1000.0
     screen.blit(background, (0, 0))
-    
+
     if game_start:
         if is_online:
             server.checkGameIsFind()
         else:
             if not party.update(screen):
                 game_start = False
-    
+
     for event in pygame.event.get():
         if not game_start:
             manager.process_events(event)
@@ -62,6 +60,3 @@ while running:
     if not game_start:
         manager.update(time_delta)
         manager.draw_ui(screen)
-      
-   
-    
