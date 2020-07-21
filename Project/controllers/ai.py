@@ -1,6 +1,7 @@
 import pygame
 import os
 import random
+from tank import Tank
 from controller import Controller
 
 min_puissance = 4
