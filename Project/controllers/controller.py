@@ -1,5 +1,6 @@
 import pygame
 import os
+import sys
 from tank import Tank
 
 min_puissance = 2
