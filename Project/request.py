@@ -10,6 +10,8 @@ class RequestServer():
     def __init__(self):
         self.player = None
         self.game = None
+        self.players = []
+        self.current_player = None
 
     def playOnline(self):
         payload = {'pseudo': 'losabit', 'want_to_play': False}
@@ -34,23 +36,41 @@ class RequestServer():
             self.player = result
             r = requests.get(url + "/games/" + str(result["play_on"]) + "?format=json")
             self.game = json.loads(r.text)
-            print(self.game)
-            return True
+            if self.game["turn_id"] is not None:
+                self.getInfo()
+                return True
+            else:
+                return False
         else:
             return False
 
     def loadGame(self):
         r = requests.get(url + '/players/?format=json')
         result = json.loads(r.text)
-        players = []
-        count = 0
-        r = requests.get(url + '/players/' + "/?format=json")
-        result = json.loads(r.text)
-        for p in result:
-            if game_id == p["play_on"]:
-                players[count] = p
-                count += 1
-        Online(650, count, players)
+        for player in result:
+            if player['play_on'] == self.game['id'] and player['id'] == self.player['id']:
+                self.players.append(player)
+        r = requests.get(url + "/players/" + str(self.player["id"]) + "?format=json")
+        self.player = json.loads(r.text)
+
+    def endTurn(self):
+        if self.player is None:
+            return
+        self.player['end_of_turn'] = True
+        headers = {'Content-type': 'application/json'}
+        r = requests.put(url + '/players/' + str(self.player["id"]) + "?format=json", data=json.dumps(self.player), headers=headers)
+        self.player = json.loads(r.text)
+
+    def getInfo(self):
+        r = requests.get(url + "/games/" + str(self.game["id"]) + "?format=json")
+        self.game = json.loads(r.text)
+        r = requests.get(url + "/players/" + str(self.game["turn_id"]) + "?format=json")
+        self.current_player = json.loads(r.text)
+
+    def sendInfo(self):
+        headers = {'Content-type': 'application/json'}
+        r = requests.put(url + '/players/' + str(self.player["id"]) + "?format=json", data=json.dumps(self.player), headers=headers)
+        self.player = json.loads(r.text)
 
     def delete(self):
         if self.player is None:

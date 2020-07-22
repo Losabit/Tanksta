@@ -4,6 +4,7 @@ import math
 import os
 from request import RequestServer
 from offline import Offline
+from online import Online
 
 directory = str(os.path.abspath(os.getcwd())) + '/'  # + '/Project/'
 
@@ -42,7 +43,7 @@ while running:
 
     if game_start:
         if is_online:
-            print("yo")
+            party.update(screen)
         else:
             if not party.update(screen):
                 game_start = False
@@ -78,7 +79,10 @@ while running:
     if not game_start and not is_online:
         manager.update(time_delta)
         manager.draw_ui(screen)
-    if is_online:
-        game_start = server.checkGameIsFind()
+    if is_online and not game_start:
         online_manager.update(time_delta)
         online_manager.draw_ui(screen)
+        game_start = server.checkGameIsFind()
+        if game_start:
+            server.loadGame()
+            party = Online(server)

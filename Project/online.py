@@ -11,33 +11,45 @@ MOVEMENT_LIMIT = 120
 class Online():
     numberOfPlayers = 0
 
-    def __init__(self, y, numberOfPlayers=0, p=None):
-        self.tanks = self.initTankPositions(numberOfPlayers, y)
-        self.player = Player(self.tanks[0])
-        self.turn = -1
-        self.origin_tank_position = None
-        self.nextTurn()
-        self.players = p
+    def __init__(self, server):
+        if len(server.players) == 0:
+            print("need more than 1 player")
+            pygame.quit()
+        print(server.players)
+        self.server = server
+        self.tanks = self.initTankPositions(server.players)
+        self.player_tank = Tank(tuple([server.player['pos_x'], server.player['pos_y']]))
+        self.player_tank.canon_angle = server.player['canon_orientation']
+        self.player = Player(self.player_tank)
 
-    def initTankPositions(self, numberOfTank, y):
+    def initTankPositions(self, players):
         tanks = []
-        for i in range(numberOfTank):
-            tanks.append(Tank(tuple([350 + i * 400, y])))
+        for player in players:
+            tanks.append(Tank(tuple([player['pos_x'], player['pos_y']])))
+            tanks[len(tanks) - 1].canon_angle = player['canon_orientation']
         return tanks
 
     def update(self, screen):
-        if self.turn == 0:
-            self.player.update()
-            if self.difference_position(self.origin_tank_position, self.player.tank.body_rect) > MOVEMENT_LIMIT or len(
-                    self.player.tank.bullets) >= 1:
-                self.nextTurn()
-                self.player.stop()
+        if self.server.current_player == None:
+            print("errooooor")
+        if self.server.current_player['id'] == self.server.player['id']:
+            self.server.sendInfo()
+            for event in pygame.event.get():
+                self.player.controller(event)
+                if event.type == pygame.QUIT:
+                    self.server.delete()
+                    pygame.quit()
+                    print("Game Closed")
+        else:
+            self.server.getInfo()
+           
 
             
 
         for tank in self.tanks:
             tank.display(screen, self.tanks)
-
+        self.player.tank.display(screen, self.tanks)
+        '''
         for i in range(len(self.tanks)):
             if i >= len(self.tanks):
                 i = len(self.tanks) - 1
@@ -46,15 +58,12 @@ class Online():
 
         if len(self.tanks) == 1:
             return False
-
+        '''
         for event in pygame.event.get():
-            if self.turn == 0:
-                self.player.controller(event)
-
             if event.type == pygame.QUIT:
+                self.server.delete()
                 pygame.quit()
                 print("Game Closed")
-                running = False
 
         return True
 
