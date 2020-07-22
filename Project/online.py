@@ -25,6 +25,8 @@ class Online():
         self.player = Player(self.player_tank)
         self.origin_position = None
         self.nextTurn = False
+        self.last_indice = -1
+        self.last_player = None
 
     def initTankPositions(self, players):
         tanks = []
@@ -68,15 +70,18 @@ class Online():
         else:
             self.server.getInfo()
             current_player = self.server.current_player
-            if not current_player["id"] in self.ids:
-                print("id not found")
-            else :
+            if current_player["id"] in self.ids:
                 indice = self.ids[current_player["id"]]
                 self.tanks[indice].move(current_player["pos_x"] - self.tanks[indice].body_rect.x)
                 self.tanks[indice].current_health = current_player["health"]
                 self.tanks[indice].moveCanon(current_player["canon_orientation"] - self.tanks[indice].canon_angle)
-                if current_player["shoot"]:
-                    self.tanks[indice].shoot(current_player["puissance"])
+                if self.last_indice != -1:
+                    self.last_indice = indice
+                    self.last_player = current_player
+                if self.last_indice != indice: 
+                    self.tanks[indice].shoot(self.last_player["puissance"])
+                    self.last_indice = indice
+                    self.last_player = current_player
 
         for tank in self.tanks:
             if tank.current_health != 0:
