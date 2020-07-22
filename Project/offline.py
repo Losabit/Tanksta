@@ -42,7 +42,7 @@ class Offline():
                 self.nextTurn()
                 self.player.stop()
         else:
-            self.ai[self.turn - 1].random_controller(None)
+            self.ai[self.turn - 1].random_controller(self.player.tank)
             if self.difference_position(self.origin_tank_position, self.ai[self.turn - 1].tank.body_rect) > MOVEMENT_LIMIT or len(self.ai[self.turn - 1].tank.bullets) >= 1:
                 self.nextTurn()
 

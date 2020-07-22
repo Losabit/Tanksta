@@ -7,3 +7,5 @@ Project/controllers/__pycache__/ai.cpython-38.pyc
 Project/controllers/__pycache__/controller.cpython-38.pyc
 Project/controllers/__pycache__/player.cpython-38.pyc
 .idea/workspace.xml
+Project/__pycache__/*
+Project/controllers/__pycache__/*

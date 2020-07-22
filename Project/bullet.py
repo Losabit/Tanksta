@@ -52,8 +52,6 @@ class Bullet(pygame.sprite.Sprite):
     def updateBulletPosition(self, dt):
         self.rect[0] = self.updateX(dt)
         self.rect[1] = self.updateY(dt)
-        print("X:",self.rect[0])
-        print("Y:",self.rect[1])
         self.time = self.time + dt
 
     def display(self, screen, delta):
