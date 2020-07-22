@@ -41,3 +41,10 @@ class RequestServer():
 
     def deleteAll(self):
         print("t")
+
+    def getNbValidate(self, players, game_id):
+        r = requests.get(url + '/players/'+"/?format=json")
+        resultat = json.loads(r.text)
+        for p in resultat:
+            print("ok")
+        return
