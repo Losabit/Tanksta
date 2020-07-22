@@ -1,9 +1,10 @@
 import sys
 import pygame
-
+import pygame_gui
 sys.path.append('controllers')
 from controllers.player import Player
 from tank import Tank
+from gui import GUI
 
 MOVEMENT_LIMIT = 120
 
@@ -27,6 +28,8 @@ class Online():
         self.nextTurn = False
         self.last_indice = -1
         self.last_player = None
+        self.manager = pygame_gui.UIManager((1600, 900))
+        self.gui = GUI(self.tanks, manager=self.manager)
 
     def initTankPositions(self, players):
         tanks = []
@@ -44,6 +47,8 @@ class Online():
         return ids
 
     def update(self, screen):
+
+        self.gui.draw(0, screen)
         if self.server.current_player == None:
             print("error")
 
