@@ -80,7 +80,7 @@ class Online():
                 self.tanks[indice].move(current_player["pos_x"] - self.tanks[indice].body_rect.x)
                 self.tanks[indice].current_health = current_player["health"]
                 self.tanks[indice].moveCanon(current_player["canon_orientation"] - self.tanks[indice].canon_angle)
-                if self.last_indice != -1:
+                if self.last_indice == -1:
                     self.last_indice = indice
                     self.last_player = current_player
                 if self.last_indice != indice: 
