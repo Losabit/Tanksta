@@ -51,11 +51,11 @@ class RequestServer():
         else:
             return False
 
-    def loadGame(self, game_id):
+    def loadGame(self):
         r = requests.get(url + '/players/?format=json')
         result = json.loads(r.text)
         for player in result:
-            if player['play_on'] == self.game['id'] and player['id'] == self.player['id']:
+            if player['play_on'] == self.game['id'] and player['id'] != self.player['id']:
                 self.players.append(player)
         r = requests.get(url + "/players/" + str(self.player["id"]) + "?format=json")
         self.player = json.loads(r.text)
@@ -67,7 +67,8 @@ class RequestServer():
         headers = {'Content-type': 'application/json'}
         r = requests.put(url + '/players/' + str(self.player["id"]) + "?format=json", data=json.dumps(self.player), headers=headers)
         self.player = json.loads(r.text)
-
+        self.getInfo()
+        
     def getInfo(self):
         r = requests.get(url + "/games/" + str(self.game["id"]) + "?format=json")
         self.game = json.loads(r.text)

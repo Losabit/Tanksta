@@ -28,6 +28,7 @@ class Online():
     def initTankPositions(self, players):
         tanks = []
         for player in players:
+            print(tuple([player['pos_x'], player['pos_y']]))
             tanks.append(Tank(tuple([player['pos_x'], player['pos_y']])))
             tanks[len(tanks) - 1].canon_angle = player['canon_orientation']
         return tanks
@@ -37,7 +38,7 @@ class Online():
             print("error")
 
         if self.server.current_player['id'] == self.server.player['id']:
-            if self.player.tank.health == 0 or self.nextTurn:
+            if self.player.tank.current_health == 0 or self.nextTurn:
                 self.origin_position = None
                 self.server.endTurn()
                 self.nextTurn = False
@@ -53,7 +54,7 @@ class Online():
                         pygame.quit()
                         print("Game Closed")
 
-                if difference_position(self.origin_position, self.player.tank) > MOVEMENT_LIMIT or len(self.player.tank.bullets) >= 1:
+                if self.difference_position(self.origin_position, self.player.tank.body_rect) > MOVEMENT_LIMIT or len(self.player.tank.bullets) >= 1:
                     self.nextTurn = True
         else:
             self.server.getInfo()
