@@ -22,20 +22,23 @@ class AI(Controller):
         if random.randint(1, 1000) < 30:
             self.tank.move(-random.randint(1, 60))
         if random.randint(1, 1000) < 60:
-            self.tank.moveCanon(self.predictAngle(tank))
+            self.tank.moveCanon(self.predictAngle(self.tank.canon_angle,tank))
             self.tank.shoot(self.puissance if self.puissance < max_puissance else max_puissance)
             self.puissance = random.randint(1, 20)
             self.increase_puissance = False
 
-    def predictAngle(self, tank):
-        deltaX = self.tank.body_rect[0] - tank.body_rect[0]
-        print(deltaX)
-        deltaY = self.tank.body_rect[1] - tank.body_rect[1]
-        deg = math.atan2(deltaY, deltaX) * (180 / math.pi)
+    def predictAngle(self,canon_angle, tank):
         if self.tank.body_rect[0] > tank.body_rect[0]:
-            deg = (deg - 180) % -360
+            if canon_angle == -200:
+                return 0
+            else:
+                deg = -200
+        else:
+            if canon_angle == 200:
+                return 0
+            else:
+                deg = 200
         return deg
-
 
         '''
         if event.key == pygame.K_q:
