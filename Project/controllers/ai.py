@@ -1,5 +1,6 @@
 import pygame
 import os
+import math
 import random
 from tank import Tank
 from controller import Controller
@@ -21,6 +22,13 @@ class AI(Controller):
             self.tank.shoot(self.puissance if self.puissance < max_puissance else max_puissance)
             self.puissance = min_puissance
             self.increase_puissance = False
+
+
+    def predictAngle(self, Tank):
+        deltaX = self.Tank.body_rect[0] - Tank.body_rect[0]
+        deltaY = self.Tank.body_rect[1] - Tank.body_rect[1]
+        deg = math.atan2(deltaY,deltaX) * (180 / math.pi)
+        return deg
 
         '''
         if event.key == pygame.K_q:
