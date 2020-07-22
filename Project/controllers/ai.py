@@ -33,7 +33,8 @@ class AI(Controller):
         deltaY = self.tank.body_rect[1] - tank.body_rect[1]
         deg = math.atan2(deltaY, deltaX) * (180 / math.pi)
         if self.tank.body_rect[0] > tank.body_rect[0]:
-            deg -= 180;
+            deg -= 180
+            deg %= 360
         return deg
 
 
