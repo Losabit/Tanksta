@@ -12,25 +12,27 @@ ecart_angle = 15
 canon_angle_value = 2
 move_value = 3
 
+
 class AI(Controller):
     def __init__(self, Tank):
         Controller.__init__(self, Tank)
 
-    def random_controller(self, tank):    
+    def random_controller(self, tank):
         self.increase_puissance = True
         if random.randint(1, 1000) < 30:
-            self.tank.move(-random.randint(1,60))
+            self.tank.move(-random.randint(1, 60))
         if random.randint(1, 1000) < 60:
-            self.tank.moveCanon(-random.randint(1,90))
+            self.tank.moveCanon(self.predictAngle(tank))
             self.tank.shoot(self.puissance if self.puissance < max_puissance else max_puissance)
-            self.puissance = random.randint(1,20)
+            self.puissance = random.randint(1, 20)
             self.increase_puissance = False
 
-
-    def predictAngle(self, Tank):
-        deltaX = self.Tank.body_rect[0] - Tank.body_rect[0]
-        deltaY = self.Tank.body_rect[1] - Tank.body_rect[1]
-        deg = math.atan2(deltaY,deltaX) * (180 / math.pi)
+    def predictAngle(self, tank):
+        deltaX = self.tank.body_rect[0] - tank.body_rect[0]
+        print(deltaX)
+        deltaY = self.tank.body_rect[1] - tank.body_rect[1]
+        deg = math.atan2(deltaY, deltaX) * (180 / math.pi)
+        print(deg)
         return deg
 
         '''
@@ -47,7 +49,7 @@ class AI(Controller):
             self.can_move_canon = False
         '''
 
-    def basic_controller(self, tank, tanks_ennemies):    
+    def basic_controller(self, tank, tanks_ennemies):
         self.increase_puissance = True
         if random.randint(1, 1000) < 60:
             self.tank.shoot(self.puissance if self.puissance < max_puissance else max_puissance)
