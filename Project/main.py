@@ -80,5 +80,6 @@ while running:
         manager.draw_ui(screen)
     if is_online:
         game_start = server.checkGameIsFind()
+        gameGo = server.getNbValidate(online_manager)
         online_manager.update(time_delta)
         online_manager.draw_ui(screen)

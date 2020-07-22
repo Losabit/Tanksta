@@ -1,5 +1,11 @@
+import pygame
 import requests
 import json
+
+from pygame import font
+import pygame_gui
+from utils.timeCapsule import TimeCapsule
+
 from online import Online
 
 # https://fr.python-requests.org/en/latest/user/quickstart.html
@@ -22,7 +28,8 @@ class RequestServer():
             return
         self.player['want_to_play'] = True
         headers = {'Content-type': 'application/json'}
-        r = requests.put(url + '/players/' + str(self.player["id"]) + "?format=json", data=json.dumps(self.player), headers=headers)
+        r = requests.put(url + '/players/' + str(self.player["id"]) + "?format=json", data=json.dumps(self.player),
+                         headers=headers)
         self.player = json.loads(r.text)
 
     def checkGameIsFind(self):
@@ -39,7 +46,7 @@ class RequestServer():
         else:
             return False
 
-    def loadGame(self):
+    def loadGame(self, game_id):
         r = requests.get(url + '/players/?format=json')
         result = json.loads(r.text)
         players = []
@@ -52,15 +59,20 @@ class RequestServer():
                 count += 1
         Online(650, count, players)
 
+    def getNbValidate(self, online_manager):
+        initt = 5
+        if self.game["players"] >= self.game["players_want_play"]:
+            font = pygame.font.SysFont("comicsansms", 30)
+            text = font.render("{1} on {0} as validate".format(self.game["players"], self.game["players_want_play"]),
+                               True, (120, 0, 0))
+            label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((900, 400), (200, 200)),text="{1} on {0} as "
+                                                                                                      "validate".format(self.game["players"], self.game["players_want_play"]),manager=online_manager)
+            print("{1} on {0} as validate".format(self.game["players"], self.game["players_want_play"]))
+            t = TimeCapsule(initt)
 
-    def getNbValidate(self, players, game_id):
-        r = requests.get(url + '/players/'+"/?format=json")
-        resultat = json.loads(r.text)
-        for p in resultat:
-            print("ok")
-        return
     def delete(self):
         if self.player is None:
             return
         headers = {'Content-type': 'application/json'}
-        r = requests.delete(url + '/players/' + str(self.player["id"]) + "?format=json", data=json.dumps(self.player), headers=headers)
+        r = requests.delete(url + '/players/' + str(self.player["id"]) + "?format=json", data=json.dumps(self.player),
+                            headers=headers)
