@@ -70,12 +70,13 @@ class Online():
             current_player = self.server.current_player
             if not current_player["id"] in self.ids:
                 print("id not found")
-            indice = self.ids[current_player["id"]]
-            self.tanks[indice].move(current_player["pos_x"] - self.tanks[indice].body_rect.x)
-            self.tanks[indice].current_health = current_player["health"]
-            self.tanks[indice].moveCanon(current_player["canon_orientation"] - self.tanks[indice].canon_angle)
-            if current_player["shoot"]:
-                self.tanks[indice].shoot(current_player["puissance"])
+            else :
+                indice = self.ids[current_player["id"]]
+                self.tanks[indice].move(current_player["pos_x"] - self.tanks[indice].body_rect.x)
+                self.tanks[indice].current_health = current_player["health"]
+                self.tanks[indice].moveCanon(current_player["canon_orientation"] - self.tanks[indice].canon_angle)
+                if current_player["shoot"]:
+                    self.tanks[indice].shoot(current_player["puissance"])
 
         for tank in self.tanks:
             if tank.current_health != 0:
