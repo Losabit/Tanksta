@@ -32,8 +32,10 @@ class AI(Controller):
         print(deltaX)
         deltaY = self.tank.body_rect[1] - tank.body_rect[1]
         deg = math.atan2(deltaY, deltaX) * (180 / math.pi)
-        print(deg)
+        if self.tank.body_rect[0] > tank.body_rect[0]:
+            deg -= 180;
         return deg
+
 
         '''
         if event.key == pygame.K_q:
