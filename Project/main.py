@@ -43,7 +43,6 @@ while running:
     if game_start:
         if is_online:
             print("yo")
-            #server.checkGameIsFind()
         else:
             if not party.update(screen):
                 game_start = False
@@ -80,5 +79,6 @@ while running:
         manager.update(time_delta)
         manager.draw_ui(screen)
     if is_online:
+        game_start = server.checkGameIsFind()
         online_manager.update(time_delta)
         online_manager.draw_ui(screen)

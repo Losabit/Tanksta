@@ -9,6 +9,7 @@ url = 'http://py.saveyourfood.fr:8000/'
 class RequestServer():
     def __init__(self):
         self.player = None
+        self.game = None
 
     def playOnline(self):
         payload = {'pseudo': 'losabit', 'want_to_play': False}
@@ -27,17 +28,20 @@ class RequestServer():
     def checkGameIsFind(self):
         if self.player is None:
             return
-        r = requests.get(url + "/players/" + str(self.player["id"]) + "/?format=json")
+        r = requests.get(url + "/players/" + str(self.player["id"]) + "?format=json")
         result = json.loads(r.text)
         if result["play_on"] is not None:
-            self.loadGame(result["play_on"])
+            self.player = result
+            r = requests.get(url + "/games/" + str(result["play_on"]) + "?format=json")
+            self.game = json.loads(r.text)
+            print(self.game)
+            return True
+        else:
+            return False
 
-    def loadGame(self, game_id, tank):
-        self.player["health"] = tank
-        self.player["pos_x"] = tank.body_rect.x
-        self.player["pos_y"] = tank.body_rect.y
-        self.player["canon_orientation"] = tank.canon_angle
-        r = requests.put(url + '/players/' + str(self.player["id"]), data=self.player)
+    def loadGame(self):
+        r = requests.get(url + '/players/?format=json')
+        result = json.loads(r.text)
         players = []
         count = 0
         r = requests.get(url + '/players/' + "/?format=json")
