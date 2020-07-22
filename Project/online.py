@@ -17,9 +17,10 @@ class Online():
             pygame.quit()
         print(server.players)
         self.server = server
+        self.ids = self.initIds(server.players)
         self.tanks = self.initTankPositions(server.players)
         self.player_tank = Tank(tuple([server.player['pos_x'], server.player['pos_y']]))
-        self.player_tank.canon_angle = server.player['canon_orientation']
+        self.player_tank.moveCanon(server.player['canon_orientation'] - self.player_tank.canon_angle)
         self.tanks.append(self.player_tank)
         self.player = Player(self.player_tank)
         self.origin_position = None
@@ -28,10 +29,17 @@ class Online():
     def initTankPositions(self, players):
         tanks = []
         for player in players:
-            print(tuple([player['pos_x'], player['pos_y']]))
             tanks.append(Tank(tuple([player['pos_x'], player['pos_y']])))
-            tanks[len(tanks) - 1].canon_angle = player['canon_orientation']
+            tanks[len(tanks) - 1].moveCanon(player["canon_orientation"] - tanks[len(tanks) - 1].canon_angle)
         return tanks
+
+    def initIds(self, players):
+        ids = {}
+        count = 0
+        for player in players:
+            ids[player['id']] = count
+            count += 1
+        return ids
 
     def update(self, screen):
         if self.server.current_player == None:
@@ -49,6 +57,7 @@ class Online():
                 self.server.sendInfo(self.player.tank)
                 for event in pygame.event.get():
                     self.player.controller(event)
+                    self.player.update()
                     if event.type == pygame.QUIT:
                         self.server.delete()
                         pygame.quit()
@@ -58,10 +67,19 @@ class Online():
                     self.nextTurn = True
         else:
             self.server.getInfo()
-           
+            current_player = self.server.current_player
+            if not current_player["id"] in self.ids:
+                print("id not found")
+            indice = self.ids[current_player["id"]]
+            self.tanks[indice].move(current_player["pos_x"] - self.tanks[indice].body_rect.x)
+            self.tanks[indice].current_health = current_player["health"]
+            self.tanks[indice].moveCanon(current_player["canon_orientation"] - self.tanks[indice].canon_angle)
+            if current_player["shoot"]:
+                self.tanks[indice].shoot(current_player["puissance"])
 
         for tank in self.tanks:
-            tank.display(screen, self.tanks)
+            if tank.current_health != 0:
+                tank.display(screen, self.tanks)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

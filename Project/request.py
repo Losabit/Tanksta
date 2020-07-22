@@ -68,7 +68,7 @@ class RequestServer():
         r = requests.put(url + '/players/' + str(self.player["id"]) + "?format=json", data=json.dumps(self.player), headers=headers)
         self.player = json.loads(r.text)
         self.getInfo()
-        
+
     def getInfo(self):
         r = requests.get(url + "/games/" + str(self.game["id"]) + "?format=json")
         self.game = json.loads(r.text)
@@ -77,6 +77,7 @@ class RequestServer():
 
     def sendInfo(self, tank):
         headers = {'Content-type': 'application/json'}
+        self.player['health'] = tank.current_health
         self.player['pos_x'] = tank.body_rect.x
         self.player['pos_y'] = tank.body_rect.y
         self.player['shoot'] = len(tank.bullets) >= 1
