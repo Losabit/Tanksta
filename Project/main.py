@@ -80,6 +80,8 @@ while running:
         manager.update(time_delta)
         manager.draw_ui(screen)
     if is_online and not game_start:
+        game_start = server.checkGameIsFind()
+        gameGo = server.getNbValidate(online_manager)
         online_manager.update(time_delta)
         online_manager.draw_ui(screen)
         game_start = server.checkGameIsFind()
