@@ -20,7 +20,10 @@ class Online():
         self.tanks = self.initTankPositions(server.players)
         self.player_tank = Tank(tuple([server.player['pos_x'], server.player['pos_y']]))
         self.player_tank.canon_angle = server.player['canon_orientation']
+        self.tanks.append(self.player_tank)
         self.player = Player(self.player_tank)
+        self.origin_position = None
+        self.nextTurn = False
 
     def initTankPositions(self, players):
         tanks = []
@@ -31,34 +34,34 @@ class Online():
 
     def update(self, screen):
         if self.server.current_player == None:
-            print("errooooor")
+            print("error")
+
         if self.server.current_player['id'] == self.server.player['id']:
-            self.server.sendInfo()
-            for event in pygame.event.get():
-                self.player.controller(event)
-                if event.type == pygame.QUIT:
-                    self.server.delete()
-                    pygame.quit()
-                    print("Game Closed")
+            if self.player.tank.health == 0 or self.nextTurn:
+                self.origin_position = None
+                self.server.endTurn()
+                self.nextTurn = False
+            else:
+                if self.origin_position == None:
+                    self.origin_position = [self.player.tank.body_rect.x, self.player.tank.body_rect.y]
+
+                self.server.sendInfo(self.player.tank)
+                for event in pygame.event.get():
+                    self.player.controller(event)
+                    if event.type == pygame.QUIT:
+                        self.server.delete()
+                        pygame.quit()
+                        print("Game Closed")
+
+                if difference_position(self.origin_position, self.player.tank) > MOVEMENT_LIMIT or len(self.player.tank.bullets) >= 1:
+                    self.nextTurn = True
         else:
             self.server.getInfo()
            
 
-            
-
         for tank in self.tanks:
             tank.display(screen, self.tanks)
-        self.player.tank.display(screen, self.tanks)
-        '''
-        for i in range(len(self.tanks)):
-            if i >= len(self.tanks):
-                i = len(self.tanks) - 1
-            if self.tanks[i].health <= 0:
-                del self.tanks[i]
 
-        if len(self.tanks) == 1:
-            return False
-        '''
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.server.delete()
@@ -69,13 +72,3 @@ class Online():
 
     def difference_position(self, pos1, pos2):
         return abs(pos1[0] - pos2.x) + abs(pos1[1] - pos2.y)
-
-    def nextTurn(self):
-        self.turn += 1
-        if self.turn == len(self.tanks):
-            self.turn = 0
-
-        if self.turn == 0:
-            self.origin_tank_position = [self.player.tank.body_rect.x, self.player.tank.body_rect.y]
-        else:
-            self.origin_tank_position = self.ai[self.turn - 1].tank.body_rect
