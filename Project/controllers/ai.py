@@ -18,9 +18,12 @@ class AI(Controller):
 
     def random_controller(self, tank):    
         self.increase_puissance = True
+        if random.randint(1, 1000) < 30:
+            self.tank.move(-random.randint(1,60))
         if random.randint(1, 1000) < 60:
+            self.tank.moveCanon(-random.randint(1,90))
             self.tank.shoot(self.puissance if self.puissance < max_puissance else max_puissance)
-            self.puissance = min_puissance
+            self.puissance = random.randint(1,20)
             self.increase_puissance = False
 
 
@@ -50,5 +53,3 @@ class AI(Controller):
             self.tank.shoot(self.puissance if self.puissance < max_puissance else max_puissance)
             self.puissance = min_puissance
             self.increase_puissance = False
-
-           
