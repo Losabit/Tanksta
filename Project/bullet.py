@@ -2,7 +2,8 @@ import pygame
 import os
 import math
 
-directory = str(os.path.abspath(os.getcwd())) + '/' #'/Project/'
+directory = str(os.path.abspath(os.getcwd())) + '/'  # '/Project/'
+
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, coordonates, angle, puissance):
@@ -16,10 +17,10 @@ class Bullet(pygame.sprite.Sprite):
         self.damage = 20
         self.puissance = puissance
 
-        self.vx = puissance*math.cos(math.radians(angle))
-        self.vy = puissance*math.sin(math.radians(angle))
+        self.vx = puissance * math.cos(math.radians(angle))
+        self.vy = puissance * math.sin(math.radians(angle))
 
-        self.ax =  0#puissance # vent
+        self.ax = 0  # puissance # vent
         self.ay = -9.8
 
         self.x = self.rect[0]
@@ -27,18 +28,18 @@ class Bullet(pygame.sprite.Sprite):
         self.time = 0
 
     def updateVx(self, dt):
-        self.vx = self.vx + self.ax*dt
+        self.vx = self.vx + self.ax * dt
         return self.vx
 
     def updateVy(self, dt):
-        self.vy = self.vy + self.ay*dt
+        self.vy = self.vy + self.ay * dt
         return self.vy
 
-    def updateX(self,dt):
+    def updateX(self, dt):
         self.x = self.x + 0.5 * (self.vx + self.updateVx(dt)) * dt
         return self.x
 
-    def updateY(self,dt):
+    def updateY(self, dt):
         self.y = self.y - 0.5 * (self.vy + self.updateVy(dt)) * dt
         return self.y
 

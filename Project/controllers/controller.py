@@ -19,7 +19,7 @@ class Controller():
         self.direction = 0
         self.can_move_canon = False
         self.canon_direction = 0
-
+    # Update the tank's position and angle of canon
     def update(self):
         if self.increase_puissance:
             print("Increasing power", self.puissance)
