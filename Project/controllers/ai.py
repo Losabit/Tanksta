@@ -36,21 +36,6 @@ class AI(Controller):
             deg = (deg - 180) % -360
         return deg
 
-
-        '''
-        if event.key == pygame.K_q:
-            self.can_move_canon = True
-            self.canon_direction = 1
-        elif event.key == pygame.K_d:
-            self.can_move_canon = True
-            self.canon_direction = -1
-
-        if event.key == pygame.K_q and self.tank.canon_angle < 180 + ecart_angle:
-            self.can_move_canon = False
-        elif event.key == pygame.K_d and self.tank.canon_angle > -ecart_angle:
-            self.can_move_canon = False
-        '''
-
     def basic_controller(self, tank, tanks_ennemies):
         self.increase_puissance = True
         if random.randint(1, 1000) < 60:

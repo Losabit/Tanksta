@@ -25,13 +25,6 @@ class Bullet(pygame.sprite.Sprite):
         self.x = self.rect[0]
         self.y = self.rect[1]
         self.time = 0
-      
-        '''
-        print("angle : " + str(self.angle))
-        print("puissance : " + str(self.puissance))
-        print(self.rect[0])
-        print("altitude max : " + str(self.altitude_max))
-        '''
 
     def updateVx(self, dt):
         self.vx = self.vx + self.ax*dt
