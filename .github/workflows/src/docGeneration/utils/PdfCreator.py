@@ -22,7 +22,7 @@ class PDF(FPDF):
         self.numbering = False
 
     def TOC_Entry(self, txt, level=0):
-        self.toc += [{'t': txt, 'l': level, 'p': self.numPageNum}]
+        self.toc += [{'t': txt, 'l': level, 'p': self.page_no() + 1}]
 
     def insertTOC(self, location=1, labelSize=20, entrySize=10, tocfont='Times', label='Table of Contents'):
         self.stopPageNums()
@@ -83,6 +83,7 @@ class PDF(FPDF):
         self.ln(20)
 
     def footer(self):
+        self.set_text_color(0, 0, 0)
         self.set_y(-15)
         self.set_font('Arial', 'I', 8)
         self.cell(0, 10, 'Page ' + str(self.page_no() + 1) + '/{nb}', 0, 0, 'C')
