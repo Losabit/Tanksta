@@ -26,7 +26,7 @@ class Bullet(pygame.sprite.Sprite):
         self.x = self.rect[0]
         self.y = self.rect[1]
         self.time = 0
-
+    # This is my commentary
     def updateVx(self, dt):
         self.vx = self.vx + self.ax * dt
         return self.vx

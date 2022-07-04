@@ -37,9 +37,9 @@ jobs:
         run : pip install -r .github/workflows/src/docGeneration/requirements.txt
       - name : Spacy install EN_CORE_WEB_LG && EN_CORE_WEB_SM
         run : python -m spacy download en_core_web_lg && python -m spacy download en_core_web_sm
-      - name : run docummentation script
-        run :
-          python .github/workflows/src/docGeneration/main.py
+#      - name : run docummentation script
+#        run :
+#          python .github/workflows/src/docGeneration/main.py
       - name :  Generate commentary check
         run :
           python .github/workflows/src/docGeneration/CommentaryCheck.py
