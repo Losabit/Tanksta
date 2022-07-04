@@ -230,11 +230,11 @@ def write_cosine(functionName, consineValue):
         os.makedirs(path)
     if os.path.exists(path + 'commentarySimilarity.txt'):
         with open(path + 'commentarySimilarity.txt', 'a') as f:
-            f.write("Commentary Similarity for function :  " + functionName + ' : \t' + str(consineValue) + '% \n')
-            print("Commentary Similarity for function :  " + functionName + ' : \t' + str(consineValue) + '% \n')
+            f.write("Commentary Similarity for function :  " + str(consineValue) + '% : \t' + functionName + ' \n')
+
 
     else:
         print(path)
         with open(path + 'commentarySimilarity.txt', 'w+') as f:
-            f.write("Commentary Similarity for function :  " + functionName + ' : \t' + str(consineValue) + '% \n')
-            print("Commentary Similarity for function :  " + functionName + ' : \t' + str(consineValue) + '% \n')
+            f.write("Commentary Similarity for function :  " + str(consineValue) + '% : \t' + functionName + ' \n')
+
