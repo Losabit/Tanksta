@@ -201,6 +201,8 @@ def getFunctionName(funct):
     for c in funct.split('\n'):
         if c.startswith('def'):
             return c.replace(':', '')
+    return funct
+
 
 
 def SameMeaning_nlp(cc, ca):
@@ -210,7 +212,9 @@ def SameMeaning_nlp(cc, ca):
     str2_nlp = nlp(ca[1][0]["summary_text"])
     str_nlp_nostop = nlp(' '.join([str(t) for t in str_nlp if not t.is_stop]))
     str2_nlp_nostop = nlp(' '.join([str(t) for t in str2_nlp if not t.is_stop]))
-    print("ca",ca)
+    print("ca",ca[0])
+    print("pourcentage", round(str_nlp_nostop.similarity(str2_nlp_nostop) * 100, 2))
+    print(getFunctionName(ca[0]))
     write_cosine(getFunctionName(ca[0]), round(str_nlp_nostop.similarity(str2_nlp_nostop) * 100, 2))
     return str_nlp_nostop.similarity(str2_nlp_nostop) > 0.5
 
