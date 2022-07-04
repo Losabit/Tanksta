@@ -30,7 +30,7 @@ class Offline():
         for i in range(numberOfTank):
             tanks.append(Tank(tuple([350 + i * 400, y])))
         return tanks
-
+# Fonction to update tank position
     def update(self, screen):
 
         # Draw info GUI
