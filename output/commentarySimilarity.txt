@@ -40,3 +40,46 @@ Commentary Similarity for function :  45.04% : 	    def update(self, screen):
         return True
 
  
+Commentary Similarity for function :  45.04% 
+ 	    def update(self, screen):
+
+        # Draw info GUI
+        self.gui.draw(self.turn, screen)
+        time_delta = clock.tick(60)/1000.0
+        if self.turn == 0:
+            self.player.update()
+            if self.difference_position(self.origin_tank_position, self.player.tank.body_rect) > MOVEMENT_LIMIT or len(self.player.tank.bullets) >= 1:
+                self.nextTurn()
+                self.player.stop()
+        else:
+            self.ai[self.turn - 1].random_controller(self.player.tank)
+            if self.difference_position(self.origin_tank_position, self.ai[self.turn - 1].tank.body_rect) > MOVEMENT_LIMIT or len(self.ai[self.turn - 1].tank.bullets) >= 1:
+                self.nextTurn()
+
+        for tank in self.tanks:
+            tank.display(screen, self.tanks)
+
+        for i in range(len(self.tanks)):
+            if i >= len(self.tanks):
+                i = len(self.tanks) - 1
+            if self.tanks[i].current_health <= 0:
+                del self.tanks[i]
+
+        if len(self.tanks) == 1:
+            return False
+
+        for event in pygame.event.get():
+            if self.turn == 0:
+                self.player.controller(event)
+
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                print("Game Closed")
+                running = False
+
+        self.manager.update(time_delta)
+        self.manager.draw_ui(screen)
+
+        return True
+
+ 
