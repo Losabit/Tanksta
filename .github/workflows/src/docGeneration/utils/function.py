@@ -225,16 +225,17 @@ def SameMeaning_Seq(str, str2):
 
 
 def write_cosine(functionName, consineValue):
+
     path = os.path.dirname(os.path.abspath(__file__)).split(IGNORE_DIR_NAME)[0] + 'output/'
     if not os.path.exists(path):
         os.makedirs(path)
     if os.path.exists(path + 'commentarySimilarity.txt'):
         with open(path + 'commentarySimilarity.txt', 'a') as f:
-            f.write("Commentary Similarity for function :  " + str(consineValue) + '% : \t' + functionName + ' \n')
+            f.write("Commentary Similarity for function :  " + str(consineValue) + '% \n \t' + functionName + ' \n')
 
 
     else:
         print(path)
         with open(path + 'commentarySimilarity.txt', 'w+') as f:
-            f.write("Commentary Similarity for function :  " + str(consineValue) + '% : \t' + functionName + ' \n')
+            f.write("Commentary Similarity for function :  " + str(consineValue) + '% \n \t' + functionName + ' \n')
 
